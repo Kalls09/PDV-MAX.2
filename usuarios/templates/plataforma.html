@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Plataforma{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Bem-vindo à Plataforma</h2>
+    <a class="btn btn-outline-danger" href="{% url 'logout' %}">Sair</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">O que deseja fazer?</h5>
+        <p class="card-text">Escolha uma das opções abaixo para gerenciar sua plataforma:</p>
+        <div class="d-flex gap-2">
+            {% if perms.usuarios.cadastrar_vendedor %}
+                <a href="{% url 'cadastrar_vendedor' %}" class="btn btn-primary">Cadastrar Vendedores</a>
+            {% endif %}
+            {% if perms.usuarios.cadastrar_produtos %}
+                <a href="{% url 'add_produto' %}" class="btn btn-success">Cadastrar Produtos</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

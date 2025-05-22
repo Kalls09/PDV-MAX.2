@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ produto.nome }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{{ produto.nome }}</h1>
+    <p><strong>Categoria:</strong> {{ produto.categoria }}</p>
+    <p><strong>Quantidade em estoque:</strong> {{ produto.quantidade }}</p>
+    <p><strong>Preço de compra:</strong> R$ {{ produto.preco_compra }}</p>
+    <p><strong>Preço de venda:</strong> R$ {{ produto.preco_venda }}</p>
+
+    <div class="row">
+        {% for imagem in produto.imagens.all %}
+            <div class="col-md-4 mb-3">
+                <img src="{{ imagem.imagem.url }}" class="img-fluid rounded">
+            </div>
+        {% empty %}
+            <p>Sem imagens cadastradas.</p>
+        {% endfor %}
+    </div>
+
+    <a href="{% url 'listar_produtos' %}" class="btn btn-secondary">Voltar</a>
+</div>
+{% endblock %}

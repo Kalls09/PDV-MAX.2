@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Adicionar Produto{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Adicionar Produto</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form action="{% url 'add_produto' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label">Imagens:</label>
+            <input type="file" name="imagens" class="form-control" multiple>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Nome:</label>
+            <input type="text" name="nome" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Categoria:</label>
+            <select name="categoria" class="form-select">
+                {% for categoria in categorias %}
+                    <option value="{{ categoria.id }}">{{ categoria.titulo }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Estoque Inicial:</label>
+            <input type="number" name="quantidade" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Preço de Compra:</label>
+            <input type="number" name="preco_compra" class="form-control" step="0.01">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Preço de Venda:</label>
+            <input type="number" name="preco_venda" class="form-control" step="0.01">
+        </div>
+
+        <button type="submit" class="btn btn-success">Cadastrar</button>
+    </form>
+</div>
+{% endblock %}

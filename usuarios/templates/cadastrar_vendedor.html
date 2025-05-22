@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Cadastrar Vendedor{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Cadastrar Vendedor</h2>
+
+<form method="POST" class="mb-4">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Cadastrar</button>
+</form>
+
+<h3 class="mb-3">Vendedores Cadastrados</h3>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-light">
+        <tr>
+            <th><a href="?sort=first_name">Nome</a></th>
+            <th><a href="?sort=email">Email</a></th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for vendedor in vendedores %}
+        <tr>
+            <td>{{ vendedor.first_name }} {{ vendedor.last_name }}</td>
+            <td>{{ vendedor.email }}</td>
+            <td>
+                <form method="post" action="{% url 'excluir_usuario' vendedor.id %}" onsubmit="return confirm('Deseja excluir?');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3">Nenhum vendedor encontrado.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if vendedores.has_other_pages %}
+<nav>
+  <ul class="pagination">
+    {% if vendedores.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ vendedores.previous_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">&laquo;</a>
+      </li>
+    {% endif %}
+    <li class="page-item disabled">
+      <a class="page-link">Página {{ vendedores.number }} de {{ vendedores.paginator.num_pages }}</a>
+    </li>
+    {% if vendedores.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ vendedores.next_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">&raquo;</a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+
+{% endblock %}
