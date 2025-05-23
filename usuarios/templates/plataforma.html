@@ -13,13 +13,19 @@
     <div class="card-body">
         <h5 class="card-title">O que deseja fazer?</h5>
         <p class="card-text">Escolha uma das opções abaixo para gerenciar sua plataforma:</p>
-        <div class="d-flex gap-2">
+        <div class="d-flex flex-wrap gap-2">
             {% if perms.usuarios.cadastrar_vendedor %}
                 <a href="{% url 'cadastrar_vendedor' %}" class="btn btn-primary">Cadastrar Vendedores</a>
             {% endif %}
             {% if perms.usuarios.cadastrar_produtos %}
                 <a href="{% url 'add_produto' %}" class="btn btn-success">Cadastrar Produtos</a>
             {% endif %}
+
+            <!-- Botão para realizar venda -->
+            <a href="{% url 'realizar_venda' %}" class="btn btn-warning">Realizar Venda</a>
+
+            <!-- Botão para ver logs de vendas -->
+            <a href="{% url 'listar_logs' %}" class="btn btn-secondary">Ver Logs de Vendas</a>
         </div>
     </div>
 </div>
