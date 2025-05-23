@@ -1,0 +1,26 @@
+<h2>Logs de Vendas</h2>
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <thead>
+    <tr>
+      <th>ID Venda</th>
+      <th>Usuário</th>
+      <th>Data e Hora</th>
+      <th>Valor Total</th>
+      <th>Observação</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for log in logs %}
+      <tr>
+        <td>{{ log.venda.id }}</td>
+        <td>{{ log.usuario.username }}</td>
+        <td>{{ log.data_hora }}</td>
+        <td>{{ log.valor_total }}</td>
+        <td>{{ log.observacao }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5">Nenhum log encontrado.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>

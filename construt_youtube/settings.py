@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'usuarios',
     'estoque',
     'rolepermissions',
+    'vendas',
 ]
 
 # Middleware

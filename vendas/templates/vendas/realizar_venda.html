@@ -1,0 +1,64 @@
+<!-- vendas/templates/vendas/realizar_venda.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Realizar Venda</h2>
+
+<form method="POST" novalidate>
+  {% csrf_token %}
+  
+  {{ formset.management_form }}
+
+  <div id="formset-container">
+    {% for form in formset %}
+      <div class="item-form" style="margin-bottom: 15px; padding: 10px; border: 1px solid #ccc;">
+        {{ form.produto.label_tag }}<br>
+        {{ form.produto }}<br><br>
+
+        {{ form.quantidade.label_tag }}<br>
+        {{ form.quantidade }}<br>
+      </div>
+    {% endfor %}
+  </div>
+
+  <button type="button" id="add-item" style="margin-top: 10px;">Adicionar Produto</button><br><br>
+
+  <button type="submit">Finalizar Venda</button>
+</form>
+
+<script>
+  const addItemBtn = document.getElementById('add-item');
+  const container = document.getElementById('formset-container');
+  const totalForms = document.getElementById('id_form-TOTAL_FORMS');
+
+  addItemBtn.addEventListener('click', () => {
+    const currentFormCount = parseInt(totalForms.value);
+    const newFormIndex = currentFormCount;
+
+    // Clona o último formulário
+    const lastForm = container.querySelector('.item-form:last-child');
+    const newForm = lastForm.cloneNode(true);
+
+    // Limpa os campos e atualiza os atributos name/id para o novo índice
+    newForm.querySelectorAll('input, select').forEach(input => {
+      const name = input.name;
+      if (name) {
+        const newName = name.replace(/\-\d+\-/, `-${newFormIndex}-`);
+        input.name = newName;
+        input.id = `id_${newName}`;
+        if(input.tagName.toLowerCase() === 'select') {
+          input.selectedIndex = 0;
+        } else {
+          input.value = '';
+        }
+      }
+    });
+
+    container.appendChild(newForm);
+
+    // Atualiza o total de formulários
+    totalForms.value = newFormIndex + 1;
+  });
+</script>
+{% endblock %}
