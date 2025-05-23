@@ -71,4 +71,14 @@ def realizar_venda(request):
 @login_required
 def listar_logs(request):
     logs = VendaLog.objects.select_related('venda', 'usuario').order_by('-data_hora')
-    return render(request, 'vendas/listar_logs.html', {'logs': logs})
+
+    # Para cada log, vamos buscar os itens relacionados da venda e passar junto
+    logs_com_detalhes = []
+    for log in logs:
+        itens = log.venda.itens.all()  # todos os itens daquela venda
+        logs_com_detalhes.append({
+            'log': log,
+            'itens': itens
+        })
+
+    return render(request, 'vendas/listar_logs.html', {'logs_com_detalhes': logs_com_detalhes})

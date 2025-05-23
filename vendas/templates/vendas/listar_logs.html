@@ -1,6 +1,41 @@
 <h2>Logs de Vendas</h2>
 
-<table border="1" cellpadding="5" cellspacing="0">
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 1em;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+  .detalhes-itens {
+    background-color: #fafafa;
+    border: 1px solid #ddd;
+    margin: 0 0 1em 1em;
+    padding: 0.5em;
+  }
+  .item-lista {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  .item-lista li {
+    padding: 2px 0;
+  }
+  .toggle-btn {
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: underline;
+  }
+</style>
+
+<table>
   <thead>
     <tr>
       <th>ID Venda</th>
@@ -8,19 +43,44 @@
       <th>Data e Hora</th>
       <th>Valor Total</th>
       <th>Observação</th>
+      <th>Itens</th>
     </tr>
   </thead>
   <tbody>
-    {% for log in logs %}
+    {% for entrada in logs_com_detalhes %}
       <tr>
-        <td>{{ log.venda.id }}</td>
-        <td>{{ log.usuario.username }}</td>
-        <td>{{ log.data_hora }}</td>
-        <td>{{ log.valor_total }}</td>
-        <td>{{ log.observacao }}</td>
+        <td>{{ entrada.log.venda.id }}</td>
+        <td>{{ entrada.log.usuario.username }}</td>
+        <td>{{ entrada.log.data_hora|date:"d/m/Y H:i" }}</td>
+        <td>R$ {{ entrada.log.valor_total|floatformat:2 }}</td>
+        <td>{{ entrada.log.observacao }}</td>
+        <td><span class="toggle-btn" onclick="toggleItens('itens-{{ forloop.counter }}')">Mostrar/Ocultar</span></td>
+      </tr>
+      <tr id="itens-{{ forloop.counter }}" style="display:none;">
+        <td colspan="6" class="detalhes-itens">
+          <strong>Itens Vendidos:</strong>
+          <ul class="item-lista">
+            {% for item in entrada.itens %}
+              <li>{{ item.produto.nome }} - Quantidade: {{ item.quantidade }} - Subtotal: R$ {{ item.subtotal|floatformat:2 }}</li>
+            {% empty %}
+              <li>Nenhum item registrado.</li>
+            {% endfor %}
+          </ul>
+        </td>
       </tr>
     {% empty %}
-      <tr><td colspan="5">Nenhum log encontrado.</td></tr>
+      <tr><td colspan="6">Nenhum log encontrado.</td></tr>
     {% endfor %}
   </tbody>
 </table>
+
+<script>
+  function toggleItens(id) {
+    const row = document.getElementById(id);
+    if (row.style.display === "none") {
+      row.style.display = "table-row";
+    } else {
+      row.style.display = "none";
+    }
+  }
+</script>
