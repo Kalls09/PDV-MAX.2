@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Nota Fiscal - Venda {{ venda.id }}{% endblock %}
+
+{% block content %}
+<style>
+    .cupom {
+        width: 380px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 2px dashed #333;
+        background: #fff;
+        font-family: monospace;
+    }
+    .cupom h2 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .cupom .linha {
+        border-bottom: 1px dashed #333;
+        margin: 5px 0;
+    }
+    .cupom table {
+        width: 100%;
+        font-size: 14px;
+    }
+    .cupom th, .cupom td {
+        text-align: left;
+    }
+    .cupom .total {
+        text-align: right;
+        font-weight: bold;
+    }
+    .print-btn {
+        display: flex;
+        justify-content: center;
+        margin-top: 15px;
+    }
+</style>
+
+<div class="cupom">
+    <h2>Construt LTDA</h2>
+    <div class="linha"></div>
+    <p>Venda Nº: {{ venda.id }}</p>
+    <p>Data: {{ venda.data_hora|date:"d/m/Y H:i" }}</p>  {# Corrigido o campo data_hora #}
+    <p>Vendedor: {{ venda.vendedor.username }}</p>
+    <div class="linha"></div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Qtd</th>
+                <th>Vl. Unit</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in itens %}
+            <tr>
+                <td>{{ item.produto.nome }}</td>
+                <td>{{ item.quantidade }}</td>
+                <td>R$ {{ item.preco_unitario|floatformat:2 }}</td>
+                <td>R$ {{ item.subtotal|floatformat:2 }}</td>  {# Use o subtotal direto do model #}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="linha"></div>
+    <p class="total">TOTAL: R$ {{ venda.valor_total|floatformat:2 }}</p>  {# Corrigido para valor_total #}
+    <div class="linha"></div>
+
+    <p style="text-align:center;">Obrigado pela preferência!</p>
+</div>
+
+<div class="print-btn">
+    <button onclick="window.print()" class="btn btn-secondary">🖨️ Imprimir</button>
+</div>
+
+<div class="text-center mt-3">
+    <a href="{% url 'plataforma' %}" class="btn btn-primary">Voltar para Plataforma</a>
+</div>
+
+{% endblock %}
